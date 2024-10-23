@@ -1,0 +1,8 @@
+.setting {
+  display: flex;
+  flex: 1;
+}
+
+.setting-hero {
+  flex: 4;
+}

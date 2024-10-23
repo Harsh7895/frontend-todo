@@ -1,11 +1,11 @@
 import "../styles/login.css";
 import { MdOutlineMailOutline, MdLockOutline } from "react-icons/md";
 import { RxPerson } from "react-icons/rx";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-const backend_Uri =
-  "https://todo-backend-ruddy-zeta.vercel.app/api/v1/auth/register";
+const backend_Uri = "http://localhost:3000/api/v1/auth/register";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +14,9 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -27,6 +30,8 @@ const Register = () => {
       toast.error("Passwords do not match");
       return;
     }
+
+    setLoading(true);
 
     try {
       const response = await fetch(backend_Uri, {
@@ -45,14 +50,20 @@ const Register = () => {
 
       if (response.ok) {
         toast.success("Registration successful!");
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+        navigate("/login");
       } else {
         toast.error(`Error: ${result.message}`);
       }
     } catch (error) {
-      toast.error(
-        "An error occurred while registering. Please try again.",
-        error
-      );
+      toast.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,7 +72,7 @@ const Register = () => {
       <div className="left-section">
         <div className="astronaut-image"></div>
         <h1>Welcome aboard my friend</h1>
-        <p>just a couple of clicks and we start</p>
+        <p>Just a couple of clicks and we start</p>
       </div>
       <div className="right-section">
         <h2>Register</h2>
@@ -75,6 +86,7 @@ const Register = () => {
               value={formData.name}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
           <div className="input-group">
@@ -86,6 +98,7 @@ const Register = () => {
               value={formData.email}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
           <div className="input-group">
@@ -97,6 +110,7 @@ const Register = () => {
               value={formData.password}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
           <div className="input-group">
@@ -108,13 +122,19 @@ const Register = () => {
               value={formData.confirmPassword}
               onChange={handleChange}
               required
+              disabled={loading}
             />
           </div>
-          <button type="submit" className="login-button">
-            Register
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? "Registering..." : "Register"}
           </button>
           <p className="register-text">Have an account?</p>
-          <button className="register-button" type="button">
+          <button
+            className="register-button"
+            type="button"
+            disabled={loading}
+            onClick={() => navigate("/login")}
+          >
             Login
           </button>
         </form>

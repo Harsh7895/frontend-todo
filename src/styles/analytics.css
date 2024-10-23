@@ -1,0 +1,8 @@
+.analytics {
+  display: flex;
+  flex: 1;
+}
+
+.analytics-hero {
+  flex: 4;
+}

@@ -1,0 +1,77 @@
+.sidebar-aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 30px 20px 50px 20px;
+  border-right: 1px solid #edf5fe;
+  padding-left: 0;
+  padding-right: 0;
+  overflow: hidden;
+  width: 270px;
+  z-index: 10;
+}
+
+.sidebar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+
+  > h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 10px;
+    width: 100%;
+
+    > a {
+      display: inline-flex;
+      justify-content: start;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #707070;
+      width: 100%;
+      padding: 20px 50px;
+
+      svg {
+        flex-shrink: 0;
+        vertical-align: middle;
+        size: 25;
+      }
+    }
+  }
+}
+
+.logout-btn {
+  outline: none;
+  border: none;
+  display: flex;
+  color: #cf3636;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  gap: 15px;
+  font-size: 15px;
+}
+
+.active-link {
+  background-color: #4391ed1a;
+  color: black !important;
+
+  > svg {
+    color: #707070;
+  }
+}
