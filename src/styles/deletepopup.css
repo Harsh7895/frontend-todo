@@ -1,0 +1,54 @@
+.delete-popup-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #303d438c;
+  z-index: 4;
+}
+
+.delete-popup-main {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  justify-content: flex-start;
+  align-items: center;
+  width: 335.19px;
+  height: 200px;
+  border-radius: 10px;
+  box-sizing: border-box;
+
+  > p {
+    margin-bottom: 30px;
+    size: 14px;
+    font-weight: 600;
+    line-height: 19.07px;
+  }
+}
+
+.dlt-btn,
+.cancel-btn {
+  padding: 10px;
+  width: 100%;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.dlt-btn {
+  color: white;
+  background-color: #17a2b8;
+}
+.cancel-btn {
+  color: #cf3636;
+  border: 1px solid #cf3636;
+}

@@ -1,0 +1,39 @@
+.all-email-container {
+  display: flex;
+  background-color: #fff;
+  overflow-y: scroll;
+  z-index: 10;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 10px;
+  box-sizing: border-box;
+  position: absolute;
+
+  > p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+
+    > span {
+      width: 41px;
+      height: 41px;
+      border-radius: 50%;
+      background-color: #ffebeb;
+    }
+
+    > button {
+      width: 154px;
+      height: 31px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: transparent;
+      color: #767575;
+      border: 1px solid #e2e2e2;
+      border-radius: 8px;
+    }
+  }
+}

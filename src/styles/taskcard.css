@@ -45,6 +45,36 @@
   }
 }
 
+.card-options {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  width: 80px;
+  height: 80px;
+  box-shadow: 0px 2px 22px 0px #7e7a7a40;
+  position: absolute;
+  z-index: 2;
+  background-color: white;
+  left: -80px;
+  top: 14px;
+  justify-content: space-between;
+  align-items: flex-start;
+  > button {
+    font-size: 14px;
+    line-height: 21px;
+    color: black;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: transparent;
+  }
+  .delete {
+    color: #cf3636;
+  }
+}
+
 .task-color {
   height: 5px;
   width: 5px;
@@ -68,6 +98,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
+
+  > label {
+    margin-top: 5px;
+  }
 }
 
 .task-item input[type="checkbox"] {
@@ -92,6 +126,24 @@
   align-items: center;
   font-size: 12px;
   color: #707070;
+
+  > div {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    > span {
+      border-radius: 5px;
+      padding: 2px 4px;
+      background-color: #eeecec;
+      cursor: pointer;
+    }
+  }
+}
+
+.date {
+  background-color: #eeecec;
+  border-radius: 5px;
+  padding: 2px 4px;
 }
 
 .task-footer .priority {
@@ -116,4 +168,24 @@
 }
 .priority-bg-high {
   background-color: #e44258;
+}
+
+.shared-task-toast {
+  position: absolute;
+  top: 20px;
+  right: 55px;
+  padding: 20px;
+  width: 205px;
+  height: 62px;
+  border: 1px solid #48c1b5;
+  box-shadow: 0px 4px 16px 0px #100b2714;
+  font-weight: 600;
+  color: #27303a;
+  font-size: 16px;
+  line-height: 22.4px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
 }

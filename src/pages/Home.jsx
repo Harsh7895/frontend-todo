@@ -1,63 +1,54 @@
+import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { GoPeople } from "react-icons/go";
 import { VscCollapseAll } from "react-icons/vsc";
 import { IoMdAdd } from "react-icons/io";
+import TaskCard from "../components/TaskCard";
+import TaskForm from "../components/TaskForm";
+import toast from "react-hot-toast";
 
 import "../styles/home.css";
-import TaskCard from "../components/TaskCard";
-import { useState } from "react";
-import TaskForm from "../components/TaskForm";
 
 const columns = ["Backlog", "To do", "In progress", "Done"];
-const tasks = [
-  {
-    id: 1,
-    title: "Hero section",
-    priority: "HIGH",
-    status: "backlog",
-    checklist: [
-      { title: "Design layout", isCompleted: false },
-      { title: "Write hero copy", isCompleted: false },
-      { title: "Add CTA button", isCompleted: false },
-    ],
-  },
-  {
-    id: 2,
-    title: "Typography change",
-    priority: "MODERATE",
-    status: "todo",
-    checklist: [
-      { title: "Select new font", isCompleted: false },
-      { title: "Update headings", isCompleted: false },
-      { title: "Update body text", isCompleted: false },
-    ],
-  },
-  {
-    id: 3,
-    title: "Hero section",
-    priority: "LOW",
-    status: "inprogress",
-    checklist: [
-      { title: "Create hero image", isCompleted: false },
-      { title: "Add scroll animations", isCompleted: false },
-      { title: "Test responsiveness", isCompleted: false },
-    ],
-  },
-  {
-    id: 4,
-    title: "Hero section",
-    priority: "HIGH",
-    status: "done",
-    checklist: [
-      { title: "Finalize design", isCompleted: true },
-      { title: "Add hero text", isCompleted: true },
-      { title: "Deploy changes", isCompleted: true },
-    ],
-  },
-];
 
 const Home = () => {
   const [showTaskForm, setShowTaskForm] = useState(false);
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [collapseAll, setCollapseAll] = useState(false);
+
+  const fetchTasks = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return toast.error("Login first to access tasks");
+
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/v1/task/user-tasks",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        setTasks([...result.tasks.createdTasks, ...result.tasks.assignedTasks]);
+      } else {
+        console.error("Failed to fetch tasks:", await response.json());
+      }
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   return (
     <div className="home">
@@ -75,33 +66,47 @@ const Home = () => {
 
           <select name="" id="">
             <option value="this-week">This week</option>
-            <option value="this-week">This week</option>
-            <option value="this-week">This week</option>
+            <option value="this-week">This month</option>
+            <option value="this-week">This year</option>
           </select>
         </div>
 
         <div className="board">
-          {columns.map((columnName) => (
-            <div className="column" key={columnName}>
-              <div className="column-detail">
-                <span>{columnName}</span>
-                <span>
-                  {columnName === "To do" && (
-                    <IoMdAdd onClick={() => setShowTaskForm(true)} />
-                  )}{" "}
-                  <VscCollapseAll size={19} color="#707070" />
-                </span>
-              </div>
+          {loading ? (
+            <p>Loading tasks...</p>
+          ) : (
+            columns.map((columnName) => (
+              <div className="column" key={columnName}>
+                <div className="column-detail">
+                  <span>{columnName}</span>
+                  <span>
+                    {columnName === "To do" && (
+                      <IoMdAdd onClick={() => setShowTaskForm()} />
+                    )}
+                    <VscCollapseAll
+                      size={19}
+                      color="#707070"
+                      onClick={() => setCollapseAll((prev) => !prev)}
+                    />
+                  </span>
+                </div>
 
-              <div className="column-content">
-                {tasks
-                  // .filter((task) => task.status === columnName.toLowerCase())
-                  .map((task) => (
-                    <TaskCard task={task} key={task.id} />
-                  ))}
+                <div className="column-content">
+                  {tasks
+                    .filter((task) => task.status === columnName)
+                    .map((task) => (
+                      <TaskCard
+                        task={task}
+                        key={task._id}
+                        columns={columns.filter((c) => c !== columnName)}
+                        onStatusChange={fetchTasks}
+                        collapseAll={collapseAll}
+                      />
+                    ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
 

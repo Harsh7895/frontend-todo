@@ -1,20 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MdDelete } from "react-icons/md";
 import { IoMdAdd } from "react-icons/io";
+import toast from "react-hot-toast";
 import "../styles/taskform.css";
+import AllEmails from "./AllEmails";
+
+const createUrl = "http://localhost:3000/api/v1/task/create";
+const updateUrl = "http://localhost:3000/api/v1/task/update";
 
 {
   /* eslint-disable */
 }
-export default function TaskForm({ closeForm }) {
+export default function TaskForm({ closeForm, task = null }) {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("");
-  const [checklist, setChecklist] = useState([
-    { id: 1, text: "Done Task", done: true },
-    { id: 2, text: "Task to be done", done: false },
-    { id: 3, text: "Task to be done", done: false },
-  ]);
-  const [dueDate, setDueDate] = useState("2024-08-02");
+  const [checklist, setChecklist] = useState([]);
+  const [dueDate, setDueDate] = useState("");
+  const [assignee, setAssignee] = useState("");
+  const [showAssigneeMails, setShowAssigneeMails] = useState(false);
+
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title);
+      setPriority(task.priority);
+      setChecklist(task.checklist || []);
+      setDueDate(
+        task.dueDate ? new Date(task.dueDate).toISOString().slice(0, 10) : ""
+      );
+      setAssignee(task.assigneeId);
+    }
+  }, [task]);
 
   const handleAddChecklist = () => {
     const newId =
@@ -36,9 +51,62 @@ export default function TaskForm({ closeForm }) {
     setChecklist(checklist.filter((item) => item.id !== id));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ title, priority, checklist, dueDate });
+
+    const taskData = {
+      title,
+      priority,
+      checklist,
+      dueDate,
+      assigneeId: assignee,
+    };
+
+    const token = localStorage.getItem("token");
+    if (!token) return toast.error("Please login first.");
+
+    try {
+      const response = await fetch(task ? updateUrl : createUrl, {
+        method: task ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(taskData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        toast.success(`Task ${task ? "updated" : "created"} successfully!`);
+        console.log(
+          `Task ${task ? "updated" : "created"} successfully:`,
+          result
+        );
+
+        setTitle("");
+        setPriority("");
+        setChecklist([]);
+        setDueDate("");
+        setAssignee("");
+
+        closeForm();
+      } else {
+        const errorResponse = await response.json();
+        toast.error(
+          errorResponse.message ||
+            `Failed to ${task ? "update" : "create"} task`
+        );
+        console.error(
+          `Failed to ${task ? "update" : "create"} task:`,
+          errorResponse
+        );
+      }
+    } catch (error) {
+      toast.error(
+        `An error occurred while ${task ? "updating" : "creating"} the task.`
+      );
+      console.error(`Error ${task ? "updating" : "creating"} task:`, error);
+    }
   };
 
   return (
@@ -56,6 +124,23 @@ export default function TaskForm({ closeForm }) {
             onChange={(e) => setTitle(e.target.value)}
             required
           />
+        </div>
+
+        <div className="assign-to">
+          <label htmlFor="assign-to">Assign To:</label>
+          <input
+            type="text"
+            placeholder="Add an assignee"
+            value={assignee}
+            onChange={(e) => setAssignee(e.target.value)}
+            style={{ position: "relative" }}
+            onClick={() => setShowAssigneeMails(true)}
+          />
+          <>
+            {showAssigneeMails && (
+              <AllEmails height={"512px"} width={"282px"} />
+            )}
+          </>
         </div>
 
         <div className="form-group select-priority">
@@ -135,7 +220,7 @@ export default function TaskForm({ closeForm }) {
               Cancel
             </button>
             <button type="submit" className="save">
-              Save
+              {task ? "Update" : "Save"}
             </button>
           </div>
         </div>
