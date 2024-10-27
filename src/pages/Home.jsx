@@ -8,14 +8,19 @@ import TaskForm from "../components/TaskForm";
 import toast from "react-hot-toast";
 
 import "../styles/home.css";
+import AddToBoard from "../components/AddToBoard";
 
 const columns = ["Backlog", "To do", "In progress", "Done"];
 
 const Home = () => {
-  const [showTaskForm, setShowTaskForm] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [collapseAll, setCollapseAll] = useState(false);
+  const [showTaskForm, setShowTaskForm] = useState(false);
+  const [addToBoardPopUp, setAddToBoardPopUp] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [collapseAll, setCollapseAll] = useState(
+    columns.reduce((acc, column) => ({ ...acc, [column]: true }), {})
+  );
 
   const fetchTasks = async () => {
     const token = localStorage.getItem("token");
@@ -35,7 +40,7 @@ const Home = () => {
 
       if (response.ok) {
         const result = await response.json();
-        setTasks([...result.tasks.createdTasks, ...result.tasks.assignedTasks]);
+        setTasks(result.tasks);
       } else {
         console.error("Failed to fetch tasks:", await response.json());
       }
@@ -46,20 +51,48 @@ const Home = () => {
     }
   };
 
+  const fetchUserName = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return toast.error("Login first to access tasks");
+
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/v1/user/username",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        setUserName(result.userName);
+      } else {
+        console.error("Failed to fetch user:", await response.json());
+      }
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  };
+
   useEffect(() => {
     fetchTasks();
+    fetchUserName();
   }, []);
 
   return (
     <div className="home">
       <Sidebar />
       <div className="home-hero">
-        <h2>Welcome! Harsh</h2>
+        <h2>Welcome! {userName}</h2>
 
         <div className="home-nav">
           <div>
             <h2>Board</h2>
-            <p>
+            <p onClick={() => setAddToBoardPopUp(true)}>
               <GoPeople /> Add People
             </p>
           </div>
@@ -81,12 +114,17 @@ const Home = () => {
                   <span>{columnName}</span>
                   <span>
                     {columnName === "To do" && (
-                      <IoMdAdd onClick={() => setShowTaskForm()} />
+                      <IoMdAdd onClick={() => setShowTaskForm(true)} />
                     )}
                     <VscCollapseAll
                       size={19}
                       color="#707070"
-                      onClick={() => setCollapseAll((prev) => !prev)}
+                      onClick={() =>
+                        setCollapseAll((prev) => ({
+                          ...prev,
+                          [columnName]: !prev[columnName],
+                        }))
+                      }
                     />
                   </span>
                 </div>
@@ -101,6 +139,7 @@ const Home = () => {
                         columns={columns.filter((c) => c !== columnName)}
                         onStatusChange={fetchTasks}
                         collapseAll={collapseAll}
+                        currentColumn={columnName}
                       />
                     ))}
                 </div>
@@ -110,7 +149,16 @@ const Home = () => {
         </div>
       </div>
 
-      {showTaskForm && <TaskForm closeForm={() => setShowTaskForm(false)} />}
+      {showTaskForm && (
+        <TaskForm
+          closeForm={() => setShowTaskForm(false)}
+          onCreate={fetchTasks}
+        />
+      )}
+
+      {addToBoardPopUp && (
+        <AddToBoard close={() => setAddToBoardPopUp(false)} />
+      )}
     </div>
   );
 };

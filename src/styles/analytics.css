@@ -1,8 +1,75 @@
 .analytics {
   display: flex;
-  flex: 1;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: hidden;
 }
 
 .analytics-hero {
-  flex: 4;
+  width: calc(100vw - 270px);
+  overflow-x: auto;
+  padding: 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  > h3 {
+    font-family: Open Sans;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 29.96px;
+    text-align: left;
+  }
+}
+.analytics-card-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.analytics-card {
+  width: 475px;
+  height: 264px;
+  top: 105px;
+  left: 268px;
+  gap: 0px;
+  border-radius: 12px 0px 0px 0px;
+  opacity: 0px;
+  padding: 20px;
+  background-color: #f9fcff;
+}
+.analytic {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  > p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: Open Sans;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24.51px;
+    text-align: left;
+  }
+
+  .value {
+    font-family: Open Sans;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 27.24px;
+    text-align: left;
+  }
+}
+
+.task-color {
+  height: 5px;
+  width: 5px;
+  padding: 3px;
+  border-radius: 50%;
+  background-color: #90c4cc;
+  color: #90c4cc;
 }

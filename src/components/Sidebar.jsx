@@ -5,11 +5,38 @@ import {
   FiSettings,
   FiLogOut,
 } from "react-icons/fi";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/sidebar.css";
+import toast from "react-hot-toast";
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch("http://localhost:3000/api/v1/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        localStorage.removeItem("token");
+        toast.success("Logged out successfully");
+        navigate("/login");
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+      toast.error("Error during logout:", error);
+    }
+  };
 
   return (
     <aside className="sidebar-aside">
@@ -22,29 +49,26 @@ const Sidebar = () => {
         <div>
           <Link
             to={"/"}
-            className={location.pathname == "/" ? "active-link" : ""}
+            className={location.pathname === "/" ? "active-link" : ""}
           >
-            {" "}
             <FiLayout /> Board
           </Link>
           <Link
             to={"/analytics"}
-            className={location.pathname == "/analytics" ? "active-link" : ""}
+            className={location.pathname === "/analytics" ? "active-link" : ""}
           >
-            {" "}
             <FiDatabase /> Analytics
           </Link>
           <Link
             to={"/setting"}
-            className={location.pathname == "/setting" ? "active-link" : ""}
+            className={location.pathname === "/setting" ? "active-link" : ""}
           >
-            {" "}
             <FiSettings /> Settings
           </Link>
         </div>
       </div>
 
-      <button className="logout-btn">
+      <button className="logout-btn" onClick={handleLogout}>
         <FiLogOut size={20} />
         Log out
       </button>

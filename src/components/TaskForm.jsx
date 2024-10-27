@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MdDelete } from "react-icons/md";
 import { IoMdAdd } from "react-icons/io";
 import toast from "react-hot-toast";
@@ -6,18 +6,19 @@ import "../styles/taskform.css";
 import AllEmails from "./AllEmails";
 
 const createUrl = "http://localhost:3000/api/v1/task/create";
-const updateUrl = "http://localhost:3000/api/v1/task/update";
+const updateUrl = "http://localhost:3000/api/v1/task/update-task";
 
 {
-  /* eslint-disable */
+  /*eslint-disable */
 }
-export default function TaskForm({ closeForm, task = null }) {
+export default function TaskForm({ closeForm, task = null, onCreate = null }) {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("");
   const [checklist, setChecklist] = useState([]);
   const [dueDate, setDueDate] = useState("");
   const [assignee, setAssignee] = useState("");
   const [showAssigneeMails, setShowAssigneeMails] = useState(false);
+  const assigneeRef = useRef(null);
 
   useEffect(() => {
     if (task) {
@@ -27,16 +28,28 @@ export default function TaskForm({ closeForm, task = null }) {
       setDueDate(
         task.dueDate ? new Date(task.dueDate).toISOString().slice(0, 10) : ""
       );
-      setAssignee(task.assigneeId);
+      setAssignee(task.assignee);
     }
   }, [task]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (assigneeRef.current && !assigneeRef.current.contains(event.target)) {
+        setShowAssigneeMails(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleAddChecklist = () => {
     const newId =
       checklist.length > 0
         ? Math.max(...checklist.map((item) => item.id)) + 1
         : 1;
-    setChecklist([...checklist, { id: newId, text: "", done: false }]);
+    setChecklist([...checklist, { id: newId, text: "", isCompleted: false }]);
   };
 
   const handleChecklistChange = (id, field, value) => {
@@ -59,36 +72,34 @@ export default function TaskForm({ closeForm, task = null }) {
       priority,
       checklist,
       dueDate,
-      assigneeId: assignee,
+      assignee,
     };
 
     const token = localStorage.getItem("token");
     if (!token) return toast.error("Please login first.");
 
     try {
-      const response = await fetch(task ? updateUrl : createUrl, {
-        method: task ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(taskData),
-      });
+      const response = await fetch(
+        task ? `${updateUrl}/${task._id}` : createUrl,
+        {
+          method: task ? "PATCH" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(taskData),
+        }
+      );
 
       if (response.ok) {
         const result = await response.json();
         toast.success(`Task ${task ? "updated" : "created"} successfully!`);
-        console.log(
-          `Task ${task ? "updated" : "created"} successfully:`,
-          result
-        );
-
         setTitle("");
         setPriority("");
         setChecklist([]);
         setDueDate("");
         setAssignee("");
-
+        onCreate();
         closeForm();
       } else {
         const errorResponse = await response.json();
@@ -96,16 +107,11 @@ export default function TaskForm({ closeForm, task = null }) {
           errorResponse.message ||
             `Failed to ${task ? "update" : "create"} task`
         );
-        console.error(
-          `Failed to ${task ? "update" : "create"} task:`,
-          errorResponse
-        );
       }
     } catch (error) {
       toast.error(
         `An error occurred while ${task ? "updating" : "creating"} the task.`
       );
-      console.error(`Error ${task ? "updating" : "creating"} task:`, error);
     }
   };
 
@@ -126,21 +132,27 @@ export default function TaskForm({ closeForm, task = null }) {
           />
         </div>
 
-        <div className="assign-to">
+        <div
+          className="assign-to"
+          style={{ position: "relative" }}
+          ref={assigneeRef}
+        >
           <label htmlFor="assign-to">Assign To:</label>
           <input
             type="text"
             placeholder="Add an assignee"
             value={assignee}
             onChange={(e) => setAssignee(e.target.value)}
-            style={{ position: "relative" }}
             onClick={() => setShowAssigneeMails(true)}
           />
-          <>
-            {showAssigneeMails && (
-              <AllEmails height={"512px"} width={"282px"} />
-            )}
-          </>
+          {showAssigneeMails && (
+            <AllEmails
+              height={"250px"}
+              width={"90%"}
+              assignee={assignee}
+              setAssignee={setAssignee}
+            />
+          )}
         </div>
 
         <div className="form-group select-priority">
@@ -168,7 +180,7 @@ export default function TaskForm({ closeForm, task = null }) {
 
         <div className="form-group">
           <label>
-            Checklist ({checklist.filter((item) => item.done).length}/
+            Checklist ({checklist.filter((item) => item.isCompleted).length}/
             {checklist.length}) <span className="required">*</span>
           </label>
           <div className="checklist-items">
@@ -176,9 +188,13 @@ export default function TaskForm({ closeForm, task = null }) {
               <div key={item.id} className="checklist-item">
                 <input
                   type="checkbox"
-                  checked={item.done}
+                  checked={item.isCompleted}
                   onChange={(e) =>
-                    handleChecklistChange(item.id, "done", e.target.checked)
+                    handleChecklistChange(
+                      item.id,
+                      "isCompleted",
+                      e.target.checked
+                    )
                   }
                 />
                 <input

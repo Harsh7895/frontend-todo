@@ -1,8 +1,62 @@
 .setting {
   display: flex;
-  flex: 1;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: hidden;
 }
 
 .setting-hero {
-  flex: 4;
+  overflow-x: auto;
+  padding: 40px 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.setting-form {
+  height: 484.92px;
+  width: 493.39px;
+}
+
+.input-group {
+  margin-bottom: 1rem;
+  border: 0.5px solid #828282;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  color: #828282;
+  border-radius: 5px;
+}
+
+.input-group svg {
+  padding-left: 10px;
+  padding-right: 0;
+  color: #828282;
+}
+
+input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  color: black;
+  border: none;
+}
+
+.update-button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 20px;
+}
+
+.update-button:hover {
+  background-color: #2bbbad;
 }

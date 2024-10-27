@@ -10,7 +10,13 @@ import TaskForm from "./TaskForm";
 {
   /* eslint-disable */
 }
-const TaskCard = ({ task, columns, onStatusChange, collapseAll }) => {
+const TaskCard = ({
+  task,
+  columns,
+  onStatusChange,
+  collapseAll,
+  currentColumn,
+}) => {
   const [checklist, setChecklist] = useState(task.checklist);
   const [showCheckList, setShowCheckList] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
@@ -20,8 +26,23 @@ const TaskCard = ({ task, columns, onStatusChange, collapseAll }) => {
 
   useEffect(() => {
     setShowCheckList(false);
-  }, [collapseAll]);
+  }, [collapseAll[currentColumn]]);
+
   const completedCount = checklist.filter((item) => item.isCompleted).length;
+
+  const isOverdue = task.dueDate && new Date(task.dueDate) < new Date();
+
+  const isHighPriority = task.priority.toLowerCase() === "high";
+
+  const dateStyles = {
+    backgroundColor: isOverdue
+      ? "#CF3636"
+      : isHighPriority
+      ? "#CF3636"
+      : "lightgray",
+    color: isOverdue || isHighPriority ? "white" : "black",
+    borderRadius: "6px",
+  };
 
   const handleCheckboxChange = async (index) => {
     const token = localStorage.getItem("token");
@@ -84,7 +105,7 @@ const TaskCard = ({ task, columns, onStatusChange, collapseAll }) => {
 
   const copyToClipboard = async () => {
     try {
-      const sharedLink = `${window.location.origin}?taskId=${task._id}`;
+      const sharedLink = `${window.location.origin}/task/${task._id}`;
       await navigator.clipboard.writeText(sharedLink);
       setIsShared(true);
       setShowOptions(false);
@@ -165,7 +186,7 @@ const TaskCard = ({ task, columns, onStatusChange, collapseAll }) => {
         )}
 
         <div className="task-footer">
-          <div className="date">
+          <div className="date" style={dateStyles}>
             {task?.dueDate ? formatDate(task.dueDate) : ""}
           </div>
           <div>
@@ -187,7 +208,11 @@ const TaskCard = ({ task, columns, onStatusChange, collapseAll }) => {
       </div>
       {isShared && <div className="shared-task-toast">Link Copied</div>}
       {isEditing && (
-        <TaskForm task={task} closeForm={() => setIsEditing(false)} />
+        <TaskForm
+          task={task}
+          closeForm={() => setIsEditing(false)}
+          onCreate={onStatusChange}
+        />
       )}
     </>
   );

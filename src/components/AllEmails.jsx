@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../styles/allemails.css";
 import toast from "react-hot-toast";
 {
   /*eslint-disable */
 }
-const AllEmails = ({ height, width }) => {
+const AllEmails = ({ height, width, assignee, setAssignee, close = null }) => {
   const [emails, setEmails] = useState([]);
 
   const getEmails = async () => {
@@ -23,7 +23,7 @@ const AllEmails = ({ height, width }) => {
 
       if (res.ok) {
         const result = await res.json();
-        setEmails(result.allEmails);
+        setEmails(result.emails);
       } else {
         const result = await res.json();
         toast.error(result.message);
@@ -44,9 +44,17 @@ const AllEmails = ({ height, width }) => {
     >
       {emails.map((mail, ind) => (
         <p key={ind}>
-          <span className="email-sign">mail.</span>
+          <span className="email-sign">{mail.slice(0, 2).toUpperCase()}</span>
           {mail}
-          <button>Assign</button>
+          <button
+            type="button"
+            onClick={() => {
+              setAssignee(mail);
+              close();
+            }}
+          >
+            {assignee === mail ? "Assigned" : "Assign"}
+          </button>
         </p>
       ))}
     </div>
