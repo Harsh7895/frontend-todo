@@ -12,7 +12,7 @@ const AllEmails = ({ height, width, assignee, setAssignee, close = null }) => {
     if (!token) return toast.error("Please login first.");
     try {
       const res = await fetch(
-        "http://localhost:3000/api/v1/task/allAssigneeEmails",
+        "https://todo-backend-henna-ten.vercel.app/api/v1/task/allAssigneeEmails",
         {
           method: "GET",
           headers: {

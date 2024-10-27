@@ -15,7 +15,7 @@ const Task = () => {
     const fetchTask = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/v1/task/${taskId}`,
+          `https://todo-backend-henna-ten.vercel.app/api/v1/task/${taskId}`,
           {
             method: "GET",
           }

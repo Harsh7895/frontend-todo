@@ -5,8 +5,10 @@ import toast from "react-hot-toast";
 import "../styles/taskform.css";
 import AllEmails from "./AllEmails";
 
-const createUrl = "http://localhost:3000/api/v1/task/create";
-const updateUrl = "http://localhost:3000/api/v1/task/update-task";
+const createUrl =
+  "https://todo-backend-henna-ten.vercel.app/api/v1/task/create";
+const updateUrl =
+  "https://todo-backend-henna-ten.vercel.app/api/v1/task/update-task";
 
 {
   /*eslint-disable */

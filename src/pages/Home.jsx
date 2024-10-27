@@ -28,7 +28,7 @@ const Home = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/v1/task/user-tasks",
+        "https://todo-backend-henna-ten.vercel.app/api/v1/task/user-tasks",
         {
           method: "GET",
           headers: {
@@ -57,7 +57,7 @@ const Home = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/v1/user/username",
+        "https://todo-backend-henna-ten.vercel.app/api/v1/user/username",
         {
           method: "GET",
           headers: {

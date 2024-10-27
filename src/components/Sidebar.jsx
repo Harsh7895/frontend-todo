@@ -17,13 +17,16 @@ const Sidebar = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch("http://localhost:3000/api/v1/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        "https://todo-backend-henna-ten.vercel.app/api/v1/auth/logout",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.ok) {
         localStorage.removeItem("token");
