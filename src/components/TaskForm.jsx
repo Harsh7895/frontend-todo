@@ -17,7 +17,7 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("");
   const [checklist, setChecklist] = useState([]);
-  const [dueDate, setDueDate] = useState("");
+  const [dueDate, setDueDate] = useState(new Date().getDate());
   const [assignee, setAssignee] = useState("");
   const [showAssigneeMails, setShowAssigneeMails] = useState(false);
   const assigneeRef = useRef(null);
@@ -134,29 +134,6 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
           />
         </div>
 
-        <div
-          className="assign-to"
-          style={{ position: "relative" }}
-          ref={assigneeRef}
-        >
-          <label htmlFor="assign-to">Assign To:</label>
-          <input
-            type="text"
-            placeholder="Add an assignee"
-            value={assignee}
-            onChange={(e) => setAssignee(e.target.value)}
-            onClick={() => setShowAssigneeMails(true)}
-          />
-          {showAssigneeMails && (
-            <AllEmails
-              height={"250px"}
-              width={"90%"}
-              assignee={assignee}
-              setAssignee={setAssignee}
-            />
-          )}
-        </div>
-
         <div className="form-group select-priority">
           <label>
             Select Priority <span className="required">*</span>
@@ -178,6 +155,29 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
               </label>
             ))}
           </div>
+        </div>
+
+        <div
+          className="assign-to"
+          style={{ position: "relative" }}
+          ref={assigneeRef}
+        >
+          <label htmlFor="assign-to">Assign To:</label>
+          <input
+            type="text"
+            placeholder="Add an assignee"
+            value={assignee}
+            onChange={(e) => setAssignee(e.target.value)}
+            onClick={() => setShowAssigneeMails(true)}
+          />
+          {showAssigneeMails && (
+            <AllEmails
+              height={"250px"}
+              width={"90%"}
+              assignee={assignee}
+              setAssignee={setAssignee}
+            />
+          )}
         </div>
 
         <div className="form-group">

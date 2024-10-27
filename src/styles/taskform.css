@@ -171,39 +171,51 @@ input[type="text"] {
   display: flex;
   flex-direction: row;
   gap: 10px;
+  justify-content: space-between;
   margin-top: 150px;
 }
 
 .select-date {
-  width: 100%;
   padding: 10px;
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   font-size: 14px;
-  flex: 1;
+  box-shadow: 0px 2px 12px 0px #82698c33;
+  border: 1px solid #e2e2e2;
+  color: #707070;
+  width: 185px;
 }
 
 .button-group {
   display: flex;
   gap: 10px;
-  flex: 4;
+  width: Hug (337.16px) px;
+  height: Hug (45px) px;
+  top: 521px;
+  left: 290px;
+  gap: 12px;
+  opacity: 0px;
 }
 
 .cancel,
 .save {
-  flex: 1;
   padding: 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
+  width: 162.58px;
+  height: 45px;
+  gap: 0px;
+  opacity: 0px;
+  border-radius: 8px;
 }
 
 .cancel {
   background-color: white;
-  border: 1px solid #e0e0e0;
-  color: #333;
+  border: 1px solid #cf3636;
+  color: #cf3636;
 }
 
 .save {
