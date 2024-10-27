@@ -35,6 +35,13 @@
       cursor: pointer;
     }
   }
+
+  > select {
+    outline: none;
+    background-color: transparent;
+    border: none;
+    padding: 10px;
+  }
 }
 
 .board {
@@ -83,4 +90,12 @@ svg {
 
 .column-content::-webkit-scrollbar-track {
   background-color: #f1f1f1;
+}
+
+.select-option {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: 10px;
+  transition: box-shadow 0.3s ease;
 }

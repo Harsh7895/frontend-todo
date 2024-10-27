@@ -5,10 +5,10 @@ import { VscCollapseAll } from "react-icons/vsc";
 import { IoMdAdd } from "react-icons/io";
 import TaskCard from "../components/TaskCard";
 import TaskForm from "../components/TaskForm";
+import AddToBoard from "../components/AddToBoard";
 import toast from "react-hot-toast";
 
 import "../styles/home.css";
-import AddToBoard from "../components/AddToBoard";
 
 const columns = ["Backlog", "To do", "In progress", "Done"];
 
@@ -21,14 +21,15 @@ const Home = () => {
   const [collapseAll, setCollapseAll] = useState(
     columns.reduce((acc, column) => ({ ...acc, [column]: true }), {})
   );
+  const [filterOption, setFilterOption] = useState("this-week");
 
-  const fetchTasks = async () => {
+  const fetchTasks = async (filter = "this-week") => {
     const token = localStorage.getItem("token");
     if (!token) return toast.error("Login first to access tasks");
 
     try {
       const response = await fetch(
-        "https://todo-backend-henna-ten.vercel.app/api/v1/task/user-tasks",
+        `https://todo-backend-henna-ten.vercel.app/api/v1/task/user-tasks?filter=${filter}`,
         {
           method: "GET",
           headers: {
@@ -78,8 +79,17 @@ const Home = () => {
     }
   };
 
+  const handleFilterChange = (event) => {
+    const selectedFilter = event.target.value;
+    setFilterOption(selectedFilter);
+    fetchTasks(selectedFilter);
+  };
+
   useEffect(() => {
-    fetchTasks();
+    fetchTasks(filterOption);
+  }, [filterOption]);
+
+  useEffect(() => {
     fetchUserName();
   }, []);
 
@@ -97,10 +107,16 @@ const Home = () => {
             </p>
           </div>
 
-          <select name="" id="">
-            <option value="this-week">This week</option>
-            <option value="this-week">This month</option>
-            <option value="this-week">This year</option>
+          <select onChange={handleFilterChange} value={filterOption}>
+            <option value="today" className="select-option">
+              Today
+            </option>
+            <option value="this-week" className="select-option">
+              This week
+            </option>
+            <option value="this-month" className="select-option">
+              This month
+            </option>
           </select>
         </div>
 
