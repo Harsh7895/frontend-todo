@@ -29,7 +29,7 @@ const Home = () => {
 
     try {
       const response = await fetch(
-        `https://todo-backend-henna-ten.vercel.app/api/v1/task/user-tasks?filter=${filter}`,
+        `https://backend-todo-tan.vercel.app/api/v1/task/user-tasks?filter=${filter}`,
         {
           method: "GET",
           headers: {
@@ -58,7 +58,7 @@ const Home = () => {
 
     try {
       const response = await fetch(
-        "https://todo-backend-henna-ten.vercel.app/api/v1/user/username",
+        "https://backend-todo-tan.vercel.app/api/v1/user/username",
         {
           method: "GET",
           headers: {

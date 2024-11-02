@@ -12,7 +12,7 @@ const Analytics = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          "https://todo-backend-henna-ten.vercel.app/api/v1/user/get-analytics",
+          "https://backend-todo-tan.vercel.app/api/v1/user/get-analytics",
           {
             method: "GET",
             headers: {

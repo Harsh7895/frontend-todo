@@ -73,7 +73,7 @@ const Settings = () => {
     }
     try {
       const response = await fetch(
-        "https://todo-backend-henna-ten.vercel.app/api/v1/user/update-user",
+        "https://backend-todo-tan.vercel.app/api/v1/user/update-user",
         {
           method: "PATCH",
           headers: {

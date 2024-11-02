@@ -5,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-const backend_Uri =
-  "https://todo-backend-henna-ten.vercel.app/api/v1/auth/register";
+const backend_Uri = "https://backend-todo-tan.vercel.app/api/v1/auth/register";
 
 const Register = () => {
   const [formData, setFormData] = useState({

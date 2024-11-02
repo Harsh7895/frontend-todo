@@ -18,7 +18,7 @@ const Sidebar = () => {
 
     try {
       const response = await fetch(
-        "https://todo-backend-henna-ten.vercel.app/api/v1/auth/logout",
+        "https://backend-todo-tan.vercel.app/api/v1/auth/logout",
         {
           method: "POST",
           headers: {

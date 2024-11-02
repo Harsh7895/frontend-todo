@@ -55,7 +55,7 @@ const TaskCard = ({
 
     try {
       const response = await fetch(
-        `https://todo-backend-henna-ten.vercel.app/api/v1/task/update-task/${task._id}/checklist/${index}`,
+        `https://backend-todo-tan.vercel.app/api/v1/task/update-task/${task._id}/checklist/${index}`,
         {
           method: "PATCH",
           headers: {
@@ -82,7 +82,7 @@ const TaskCard = ({
 
     try {
       const response = await fetch(
-        `https://todo-backend-henna-ten.vercel.app/api/v1/task/update-task/${task._id}`,
+        `https://backend-todo-tan.vercel.app/api/v1/task/update-task/${task._id}`,
         {
           method: "PATCH",
           headers: {

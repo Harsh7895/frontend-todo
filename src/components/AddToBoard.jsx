@@ -4,7 +4,7 @@ import "../styles/addtoboard.css";
 import AllEmails from "./AllEmails";
 
 const shareBoardUrl =
-  "https://todo-backend-henna-ten.vercel.app/api/v1/task/share-board";
+  "https://backend-todo-tan.vercel.app/api/v1/task/share-board";
 
 {
   /*eslint-disable */

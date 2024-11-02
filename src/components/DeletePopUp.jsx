@@ -11,7 +11,7 @@ const DeletePopUp = ({ closePopUp, taskId, onDeleteTask }) => {
 
     try {
       const response = await fetch(
-        `https://todo-backend-henna-ten.vercel.app/api/v1/task/delete/${taskId}`,
+        `https://backend-todo-tan.vercel.app/api/v1/task/delete/${taskId}`,
         {
           method: "DELETE",
           headers: {
