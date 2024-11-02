@@ -17,7 +17,7 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState("");
   const [checklist, setChecklist] = useState([]);
-  const [dueDate, setDueDate] = useState(new Date().getDate());
+  const [dueDate, setDueDate] = useState(null);
   const [assignee, setAssignee] = useState("");
   const [showAssigneeMails, setShowAssigneeMails] = useState(false);
   const assigneeRef = useRef(null);
