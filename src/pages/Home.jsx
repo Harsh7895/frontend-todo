@@ -21,9 +21,9 @@ const Home = () => {
   const [collapseAll, setCollapseAll] = useState(
     columns.reduce((acc, column) => ({ ...acc, [column]: true }), {})
   );
-  const [filterOption, setFilterOption] = useState("this-week");
+  const [filterOption, setFilterOption] = useState("all");
 
-  const fetchTasks = async (filter = "this-week") => {
+  const fetchTasks = async (filter = "all") => {
     const token = localStorage.getItem("token");
     if (!token) return toast.error("Login first to access tasks");
 
@@ -108,6 +108,9 @@ const Home = () => {
           </div>
 
           <select onChange={handleFilterChange} value={filterOption}>
+            <option value="all" className="select-option">
+              All
+            </option>
             <option value="today" className="select-option">
               Today
             </option>
