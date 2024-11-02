@@ -18,6 +18,7 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
   const [dueDate, setDueDate] = useState(null);
   const [assignee, setAssignee] = useState("");
   const [showAssigneeMails, setShowAssigneeMails] = useState(false);
+  const [loading, setLoading] = useState(false);
   const assigneeRef = useRef(null);
 
   useEffect(() => {
@@ -72,10 +73,11 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
     }
   };
 
-  console.log(checklist);
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (priority === "") {
+      return toast.error("Add title or priority");
+    }
     const taskData = {
       title,
       priority,
@@ -88,6 +90,7 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
     if (!token) return toast.error("Please login first.");
 
     try {
+      setLoading(true);
       const response = await fetch(
         task ? `${updateUrl}/${task._id}` : createUrl,
         {
@@ -121,6 +124,8 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
       toast.error(
         `An error occurred while ${task ? "updating" : "creating"} the task.`
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -154,7 +159,6 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
                   value={option}
                   checked={priority === option}
                   onChange={(e) => setPriority(e.target.value)}
-                  required
                 />
                 <span className={`select-priority-text ${option}`}>
                   <span className={`select-priority-text-color-${option}`}>
@@ -255,8 +259,14 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
             <button type="button" className="cancel" onClick={closeForm}>
               Cancel
             </button>
-            <button type="submit" className="save">
-              {task ? "Update" : "Save"}
+            <button type="submit" className="save" disabled={loading}>
+              {task
+                ? loading
+                  ? "Updating.."
+                  : "Update"
+                : loading
+                ? "Saving..."
+                : "Save"}
             </button>
           </div>
         </div>
