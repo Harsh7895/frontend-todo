@@ -47,10 +47,13 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
   }, []);
 
   const handleAddChecklist = () => {
-    const newId =
+    let newId =
       checklist.length > 0
         ? Math.max(...checklist.map((item) => item.id)) + 1
         : 1;
+    if (task && checklist.length > 0 && !checklist[0].id) {
+      newId = 1;
+    }
     setChecklist([...checklist, { id: newId, text: "", isCompleted: false }]);
   };
 
@@ -63,9 +66,15 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
   };
 
   const handleRemoveChecklistItem = (id) => {
-    setChecklist(checklist.filter((item) => item.id !== id));
+    console.log(id);
+    if (id) {
+      setChecklist((prevChecklist) =>
+        prevChecklist.filter((item) => item.id !== id && item._id !== id)
+      );
+    }
   };
 
+  console.log(checklist);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -172,6 +181,7 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
             value={assignee}
             onChange={(e) => setAssignee(e.target.value)}
             onClick={() => setShowAssigneeMails(true)}
+            readOnly
           />
           {showAssigneeMails && (
             <AllEmails
@@ -213,7 +223,13 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
                 <button
                   type="button"
                   className="remove-item"
-                  onClick={() => handleRemoveChecklistItem(item.id)}
+                  onClick={() => {
+                    if (item.id) {
+                      handleRemoveChecklistItem(item.id);
+                    } else if (item._id) {
+                      handleRemoveChecklistItem(item._id);
+                    }
+                  }}
                 >
                   <MdDelete size={25} color="#CF3636" />
                 </button>

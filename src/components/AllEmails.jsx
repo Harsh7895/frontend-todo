@@ -50,10 +50,13 @@ const AllEmails = ({ height, width, assignee, setAssignee, close = null }) => {
             type="button"
             onClick={() => {
               setAssignee(mail);
+              if (assignee) {
+                setAssignee("");
+              }
               close();
             }}
           >
-            {assignee === mail ? "Assigned" : "Assign"}
+            {assignee === mail ? "Unassign" : "Assign"}
           </button>
         </p>
       ))}
