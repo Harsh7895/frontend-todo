@@ -149,7 +149,10 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
                   onChange={(e) => setPriority(e.target.value)}
                   required
                 />
-                <span className={`priority-text ${option.toLowerCase()}`}>
+                <span className={`select-priority-text ${option}`}>
+                  <span className={`select-priority-text-color-${option}`}>
+                    .
+                  </span>{" "}
                   {option} PRIORITY
                 </span>
               </label>
@@ -229,7 +232,8 @@ export default function TaskForm({ closeForm, task = null, onCreate = null }) {
         <div className="form-actions">
           <input
             type="date"
-            value={dueDate}
+            value={dueDate || ""}
+            placeholder="Enter Due Date"
             onChange={(e) => setDueDate(e.target.value)}
             className="select-date"
           />
