@@ -57,7 +57,9 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="left-section">
-        <div className="astronaut-image"></div>
+        <div className="circle">
+          <div className="astronaut-image"></div>
+        </div>
         <h1>Welcome aboard my friend</h1>
         <p>Just a couple of clicks and we start</p>
       </div>
