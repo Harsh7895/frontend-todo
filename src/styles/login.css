@@ -30,29 +30,40 @@ html {
   background-repeat: no-repeat;
   background-position: center;
   position: absolute;
-  top: 50%;
+  top: 70%;
   left: 50%;
   transform: translate(-50%, -50%);
+  margin-bottom: 20px;
 }
 
 .circle {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 230px;
+  height: 230px;
   border-radius: 50%;
   background-color: #317f8b;
+  margin-bottom: 50px;
 }
 
 .left-section h1 {
-  font-size: 2.5rem;
   margin-bottom: 0;
   text-align: center;
+  font-family: Open Sans;
+  font-size: 33.08px;
+  font-weight: 600;
+  line-height: 66.15px;
+  text-align: center;
+  color: #ffffff;
 }
 
 .left-section p {
-  font-size: 2;
+  font-family: Open Sans;
+  font-size: 19.29px;
+  font-weight: 400;
+  margin-top: -10px;
+  line-height: 38.59px;
   text-align: center;
-  margin-top: 2px;
+  color: #ffffff;
 }
 
 .right-section {
